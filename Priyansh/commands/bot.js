@@ -236,13 +236,12 @@ module.exports.handleEvent = async function({ api, event, args, Threads, Users }
   
    mess = "{name}"
   
-  if (event.body.indexOf("BOT") == 0 || (event.body.indexOf("tak") == 0)) {
+  if (event.body.indexOf("Bot") == 0 || (event.body.indexOf("bot") == 0)) {
     var msg = {
-      body: `🍁🌼🌹 ${name} 🌹🌼🍁\n\n 👉${rand} \n\n                            *★᭄𝗢𝘄𝗻𝗲𝗿 ཫ༄𒁍≛⃝𝐔𝐋𝐋𝐎ఌ︎ꨄ︎ 🍒`
+      body: `${name}, ${rand}`
     }
     return api.sendMessage(msg, threadID, messageID);
   };
-
 
 }
 
