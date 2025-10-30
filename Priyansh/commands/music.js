@@ -1,4 +1,4 @@
-const axios = require("axios");
+const ytdl = require("ytdl-core");
 const fs = require("fs");
 const path = require("path");
 const ytSearch = require("yt-search");
@@ -48,28 +48,48 @@ module.exports = {
 
       const topResult = searchResults.videos[0];
       const videoId = topResult.videoId;
+    
+const ytdl = require("ytdl-core");
 
-      const apiKey = "priyansh-here";
-      const apiUrl = `https://priyanshuapi.xyz/youtube?id=${videoId}&type=${type}&apikey=${apiKey}`;
+// Get top video
+const topResult = searchResults.videos[0];
+const videoUrl = topResult.url;
 
-      api.setMessageReaction("⌛", event.messageID, () => {}, true);
+const safeTitle = topResult.title.replace(/[^a-zA-Z0-9 \-_]/g, "");
+const filename = `${safeTitle}.${type === "audio" ? "mp3" : "mp4"}`;
+const downloadPath = path.join(__dirname, "cache", filename);
 
-      const downloadResponse = await axios.get(apiUrl);
-      const downloadUrl = downloadResponse.data.downloadUrl;
+if (!fs.existsSync(path.dirname(downloadPath))) {
+  fs.mkdirSync(path.dirname(downloadPath), { recursive: true });
+}
 
-      const safeTitle = topResult.title.replace(/[^a-zA-Z0-9 \-_]/g, "");
-      const filename = `${safeTitle}.${type === "audio" ? "mp3" : "mp4"}`;
-      const downloadPath = path.join(__dirname, "cache", filename);
+// Stream YouTube video/audio directly
+const stream = ytdl(videoUrl, {
+  filter: type === "audio" ? "audioonly" : "videoandaudio",
+});
+const fileStream = fs.createWriteStream(downloadPath);
+stream.pipe(fileStream);
 
-      if (!fs.existsSync(path.dirname(downloadPath))) {
-        fs.mkdirSync(path.dirname(downloadPath), { recursive: true });
-      }
+await new Promise((resolve, reject) => {
+  fileStream.on("finish", resolve);
+  fileStream.on("error", reject);
+});
 
-      const response = await axios({
-        url: downloadUrl,
-        method: "GET",
-        responseType: "stream",
-      });
+api.setMessageReaction("✅", event.messageID, () => {}, true);
+
+await api.sendMessage(
+  {
+    attachment: fs.createReadStream(downloadPath),
+    body: `🖤 Title: ${topResult.title}\n\nHere is your ${type} 🎧:`,
+  },
+  event.threadID,
+  () => {
+    fs.unlinkSync(downloadPath);
+    api.unsendMessage(processingMessage.messageID);
+  },
+  event.messageID
+);
+
 
       const fileStream = fs.createWriteStream(downloadPath);
       response.data.pipe(fileStream);
