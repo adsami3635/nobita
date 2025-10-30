@@ -1,7 +1,8 @@
-const ytdl = require("ytdl-core");
+const axios = require("axiois")
 const fs = require("fs");
 const path = require("path");
 const ytSearch = require("yt-search");
+const ytdl = require("ytdl-core");
 
 module.exports = {
   config: {
