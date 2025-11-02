@@ -45,7 +45,7 @@ module.exports = {
       const options = { year: "numeric", month: "numeric", day: "numeric" };
       const date = currentDate.toLocaleDateString("en-US", options);
       const time = currentDate.toLocaleTimeString("en-US", {
-        timeZone: "Asia/Kolkata",
+        timeZone: "Asia/Karachi",
         hour12: true,
       });
 
