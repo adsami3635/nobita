@@ -66,7 +66,7 @@ function startBot(message) {
         if (codeExit !== 0) {
             logger(`Bot exited with code ${codeExit}`, "[ Exit ]");
             
-            if (global.countRestart < 5) {
+            if (global.countRestart < 10000) {
                 global.countRestart += 1;
                 logger(`Restarting... (${global.countRestart}/5)`, "[ Restarting ]");
                 startBot();
