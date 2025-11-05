@@ -19,7 +19,7 @@ module.exports = {
     },
   },
 
-   run: async function ({ api, event, args }) {
+  run: async function ({ api, event, args }) {
     let songName, type;
 
     if (
@@ -50,7 +50,7 @@ module.exports = {
       const videoId = topResult.videoId;
 
       const apiKey = "priyansh-here";
-      const apiUrl = `https://priyansh-ai.onrender.com/youtube?id=${videoId}&type=${type}&apikey=${apiKey}`;
+      const apiUrl = `https://priyanshuapi.xyz/youtube?id=${videoId}&type=${type}&apikey=${apiKey}`;
 
       api.setMessageReaction("⌛", event.messageID, () => {}, true);
 
